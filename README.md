@@ -176,3 +176,10 @@ Esta é uma aplicação de demonstração, não um sistema de produção:
 ## Versões utilizadas
 
 Hardhat 3.18, ethers 6.17, OpenZeppelin Contracts 5.6, Solidity 0.8.28, Express 5.2, tsx 4.23, TypeScript 7.0, Mocha 12, Chai 6, Supertest 7.3, Pact JS 17.1 (especificação V4), Playwright 1.63, @axe-core/playwright 4.13, concurrently 10, wait-on 9.5, k6 2.3.
+
+## Autor
+
+**Henrique Oliveira Costa**, Engenheiro de Qualidade de Software.
+
+- GitHub: [@henriqueocosta](https://github.com/henriqueocosta)
+- LinkedIn: [henrique-costa-aa08b515a](https://www.linkedin.com/in/henrique-costa-aa08b515a/)
