@@ -1,0 +1,7 @@
+{
+  "name": "quality-architecture",
+  "version": "0.1.0",
+  "description": "Critérios de estratégia de testes compartilhados por todos os repositórios: escolha da camada por risco, pedido de teste entre times, revisão de testes e bloqueio de secrets.",
+  "author": { "name": "Henrique" },
+  "keywords": ["testing", "test-strategy", "quality"]
+}

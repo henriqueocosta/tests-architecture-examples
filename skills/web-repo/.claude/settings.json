@@ -1,0 +1,19 @@
+{
+  "extraKnownMarketplaces": {
+    "sua-empresa": { "source": { "source": "github", "repo": "sua-empresa/claude-plugins" } }
+  },
+  "enabledPlugins": { "quality-architecture@sua-empresa": true },
+  "permissions": {
+    "deny": [
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Read(**/*.pem)",
+      "Read(**/*.key)",
+      "Read(**/*.p12)",
+      "Read(**/id_rsa*)",
+      "Read(**/id_ed25519*)",
+      "Read(**/credentials.json)",
+      "Read(**/secrets/**)"
+    ]
+  }
+}

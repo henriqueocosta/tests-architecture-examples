@@ -1,0 +1,817 @@
+{
+  "consumer": {
+    "name": "MiniDexWeb"
+  },
+  "interactions": [
+    {
+      "description": "a request for a TKA to TKB quote",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "the price provider is available"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/quotes",
+        "query": {
+          "amount": [
+            "100"
+          ],
+          "from": [
+            "TKA"
+          ],
+          "to": [
+            "TKB"
+          ]
+        }
+      },
+      "response": {
+        "body": {
+          "content": {
+            "amountIn": "100.0",
+            "amountOut": "199.4",
+            "expiresAt": "2026-01-01T12:00:15.000Z",
+            "fee": "0.6",
+            "feeBps": 30,
+            "from": "TKA",
+            "price": 2,
+            "quoteId": "5f0c3b8e-8a3a-4f7e-9d0f-2a6f1f1c9b10",
+            "to": "TKB"
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$.amountIn": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.amountOut": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.expiresAt": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^\\d{4}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d\\.\\d+([+-][0-2]\\d(:?[0-5]\\d)?|Z)$"
+                }
+              ]
+            },
+            "$.fee": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.feeBps": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.price": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.quoteId": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "a request for a quote while the price provider is down",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "the price provider is down"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/quotes",
+        "query": {
+          "amount": [
+            "100"
+          ],
+          "from": [
+            "TKA"
+          ],
+          "to": [
+            "TKB"
+          ]
+        }
+      },
+      "response": {
+        "body": {
+          "content": {
+            "error": {
+              "code": "PRICE_PROVIDER_UNAVAILABLE",
+              "message": "Price provider failure"
+            }
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$.error.message": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "status": 503
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "a request for a quote while the price provider is sending invalid responses",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "the price provider sends invalid responses"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/quotes",
+        "query": {
+          "amount": [
+            "100"
+          ],
+          "from": [
+            "TKA"
+          ],
+          "to": [
+            "TKB"
+          ]
+        }
+      },
+      "response": {
+        "body": {
+          "content": {
+            "error": {
+              "code": "PRICE_PROVIDER_BAD_RESPONSE",
+              "message": "Price provider failure"
+            }
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$.error.message": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "status": 502
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "a request for a quote while the price provider is too slow",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "the price provider is slow"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/quotes",
+        "query": {
+          "amount": [
+            "100"
+          ],
+          "from": [
+            "TKA"
+          ],
+          "to": [
+            "TKB"
+          ]
+        }
+      },
+      "response": {
+        "body": {
+          "content": {
+            "error": {
+              "code": "PRICE_PROVIDER_TIMEOUT",
+              "message": "Price provider failure"
+            }
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$.error.message": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "status": 504
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "a request for a quote with more than 18 decimals",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "the price provider is available"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/quotes",
+        "query": {
+          "amount": [
+            "0.0000000000000000001"
+          ],
+          "from": [
+            "TKA"
+          ],
+          "to": [
+            "TKB"
+          ]
+        }
+      },
+      "response": {
+        "body": {
+          "content": {
+            "error": {
+              "code": "INVALID_REQUEST",
+              "message": "amount must be a positive decimal number"
+            }
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$.error.message": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "status": 400
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "a request for the account balances",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "the trading account has balances"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/balances"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "account": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+            "balances": {
+              "TKA": "1000000.0",
+              "TKB": "1000000.0"
+            }
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$.account": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^0x[0-9a-fA-F]{40}$"
+                }
+              ]
+            },
+            "$.balances.TKA": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.balances.TKB": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "a request for the status of a confirmed swap",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "a confirmed swap exists",
+          "params": {
+            "swapId": "0b6b2a9e-3d4e-4c55-8f8e-6a1d2c3b4a59"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/swaps/0b6b2a9e-3d4e-4c55-8f8e-6a1d2c3b4a59"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "amountIn": "100.0",
+            "amountOut": "199.4",
+            "blockNumber": 42,
+            "createdAt": "2026-01-01T12:00:00.000Z",
+            "fee": "0.6",
+            "from": "TKA",
+            "status": "confirmed",
+            "swapId": "0b6b2a9e-3d4e-4c55-8f8e-6a1d2c3b4a59",
+            "to": "TKB"
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$.amountIn": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.amountOut": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.blockNumber": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.createdAt": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^\\d{4}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d\\.\\d+([+-][0-2]\\d(:?[0-5]\\d)?|Z)$"
+                }
+              ]
+            },
+            "$.fee": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "a request for the status of a failed swap",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "a failed swap exists",
+          "params": {
+            "swapId": "2d3e4f5a-6b7c-4d8e-9fa0-1b2c3d4e5f60"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/swaps/2d3e4f5a-6b7c-4d8e-9fa0-1b2c3d4e5f60"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "failure": {
+              "code": "SLIPPAGE_EXCEEDED",
+              "message": "On-chain price moved: would receive 149.55, minimum accepted 197.406"
+            },
+            "status": "failed",
+            "swapId": "2d3e4f5a-6b7c-4d8e-9fa0-1b2c3d4e5f60"
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$.failure.code": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.failure.message": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "a request for the status of a pending swap",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "a pending swap exists",
+          "params": {
+            "swapId": "1c2d3e4f-5a6b-4c7d-8e9f-0a1b2c3d4e5f"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/swaps/1c2d3e4f-5a6b-4c7d-8e9f-0a1b2c3d4e5f"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "status": "pending",
+            "swapId": "1c2d3e4f-5a6b-4c7d-8e9f-0a1b2c3d4e5f"
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "a request for the swap history",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "a swap exists in the history"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/swaps"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "swaps": [
+              {
+                "amountIn": "100.0",
+                "createdAt": "2026-01-01T12:00:00.000Z",
+                "from": "TKA",
+                "status": "confirmed",
+                "swapId": "0b6b2a9e-3d4e-4c55-8f8e-6a1d2c3b4a59",
+                "to": "TKB"
+              }
+            ]
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$.swaps": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type",
+                  "min": 1
+                }
+              ]
+            },
+            "$.swaps[*].amountIn": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.swaps[*].createdAt": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^\\d{4}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d\\.\\d+([+-][0-2]\\d(:?[0-5]\\d)?|Z)$"
+                }
+              ]
+            },
+            "$.swaps[*].from": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.swaps[*].status": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.swaps[*].swapId": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+                }
+              ]
+            },
+            "$.swaps[*].to": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "a request to swap using a valid quote",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "a valid quote exists",
+          "params": {
+            "quoteId": "5f0c3b8e-8a3a-4f7e-9d0f-2a6f1f1c9b10"
+          }
+        }
+      ],
+      "request": {
+        "body": {
+          "content": {
+            "quoteId": "5f0c3b8e-8a3a-4f7e-9d0f-2a6f1f1c9b10"
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "method": "POST",
+        "path": "/swaps"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "status": "pending",
+            "swapId": "0b6b2a9e-3d4e-4c55-8f8e-6a1d2c3b4a59",
+            "txHash": "0xabababababababababababababababababababababababababababababababab"
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$.swapId": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+                }
+              ]
+            },
+            "$.txHash": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^0x[0-9a-f]{64}$"
+                }
+              ]
+            }
+          }
+        },
+        "status": 202
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "a request to swap using an expired quote",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "an expired quote exists",
+          "params": {
+            "quoteId": "7d1e2f3a-4b5c-4d6e-8f70-81a2b3c4d5e6"
+          }
+        }
+      ],
+      "request": {
+        "body": {
+          "content": {
+            "quoteId": "7d1e2f3a-4b5c-4d6e-8f70-81a2b3c4d5e6"
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "method": "POST",
+        "path": "/swaps"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "error": {
+              "code": "QUOTE_EXPIRED",
+              "message": "Quote has expired, request a new one"
+            }
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$.error.message": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "status": 410
+      },
+      "type": "Synchronous/HTTP"
+    }
+  ],
+  "metadata": {
+    "pact-js": {
+      "version": "17.1.4"
+    },
+    "pactRust": {
+      "ffi": "0.5.8",
+      "models": "1.3.16"
+    },
+    "pactSpecification": {
+      "version": "4.0"
+    }
+  },
+  "provider": {
+    "name": "MiniDexApi"
+  }
+}

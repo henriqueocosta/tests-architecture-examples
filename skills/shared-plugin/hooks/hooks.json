@@ -1,0 +1,17 @@
+{
+  "description": "Blocks writing, committing or pushing secrets, and reading secret files through the shell.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit|NotebookEdit|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/block-secrets.mjs\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

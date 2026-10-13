@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mini DEX</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script type="module" src="app.js"></script>
+  </head>
+  <body>
+    <main>
+      <section class="card" aria-labelledby="swap-title">
+        <header class="card-header">
+          <h1 id="swap-title">Swap</h1>
+          <span class="muted">Mini DEX · demo local</span>
+        </header>
+
+        <form id="swap-form" data-testid="swap-form" autocomplete="off">
+          <div class="field">
+            <span class="chip">De: <span data-testid="account-from">—</span></span>
+            <div class="field-main">
+              <label for="amount" class="visually-hidden">Valor a enviar</label>
+              <input id="amount" name="amount" type="text" inputmode="decimal" placeholder="0" aria-describedby="balance-from-line" data-testid="amount-input" />
+              <span class="token" data-testid="token-from"></span>
+            </div>
+            <p class="field-balance" id="balance-from-line" data-testid="balance-from-line">
+              Saldo: <span data-testid="balance-from">—</span><span data-testid="balance-insufficient" hidden> · insuficiente</span>
+            </p>
+          </div>
+
+          <button type="button" class="flip" id="flip" aria-label="Inverter o par" data-testid="flip-button">⇅</button>
+
+          <div class="field">
+            <span class="chip">Para: <span data-testid="account-to">—</span></span>
+            <div class="field-main">
+              <output id="amount-out" class="amount-out" aria-label="Valor a receber" data-testid="quote-amount-out">0</output>
+              <span class="token" data-testid="token-to"></span>
+            </div>
+            <p class="field-balance">Saldo: <span data-testid="balance-to">—</span></p>
+          </div>
+
+          <div class="quote-details" data-testid="quote-panel" hidden>
+            <p>
+              Taxa (<span data-testid="quote-fee-rate"></span>): <span data-testid="quote-fee"></span> <span data-testid="quote-fee-token"></span>
+              · já descontada
+            </p>
+            <p>
+              1 <span data-testid="quote-from"></span> = <span data-testid="quote-price"></span> <span data-testid="quote-to"></span>
+              · <span data-testid="quote-countdown"></span>
+            </p>
+          </div>
+
+          <button type="submit" class="primary" id="action" data-testid="action-button" disabled>Cotar</button>
+        </form>
+
+        <p id="error" class="error" role="alert" data-testid="error-message"></p>
+        <p id="status" class="status" aria-live="polite" data-testid="swap-status"></p>
+      </section>
+
+      <section class="card" aria-labelledby="history-title">
+        <h2 id="history-title">Histórico de swaps</h2>
+        <table data-testid="history-table">
+          <thead>
+            <tr>
+              <th scope="col">Horário</th>
+              <th scope="col">Par</th>
+              <th scope="col">Enviado</th>
+              <th scope="col">Recebido</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody id="history"></tbody>
+        </table>
+        <p id="history-empty" class="muted" data-testid="history-empty">Nenhum swap ainda.</p>
+      </section>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,207 @@
+:root {
+  --bg: #0d1116;
+  --card: #151b22;
+  --field: #1b232c;
+  --border: #2a3541;
+  --text: #e6edf3;
+  --muted: #9aa7b4;
+  --primary: #2563eb;
+  --danger: #f87171;
+  --success: #4ade80;
+  font-family: system-ui, -apple-system, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  color-scheme: dark;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+}
+main {
+  max-width: 30rem;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1rem;
+}
+h1,
+h2 {
+  font-size: 1.1rem;
+  margin: 0 0 0.75rem;
+}
+.card-header h1 {
+  margin: 0;
+}
+.muted {
+  color: var(--muted);
+}
+.small {
+  font-size: 0.85rem;
+}
+
+/* ---- Swap fields ---- */
+.field {
+  background: var(--field);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 0.75rem 1rem;
+}
+.chip {
+  display: inline-block;
+  background: var(--card);
+  border-radius: 999px;
+  padding: 0.2rem 0.7rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.field-main {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.5rem 0 0.25rem;
+}
+#amount,
+.amount-out {
+  flex: 1;
+  min-width: 0;
+  font-size: 2.25rem;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  padding: 0;
+}
+#amount::placeholder,
+.amount-out.empty {
+  color: #5b6773;
+}
+.token {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.3rem 0.8rem 0.3rem 0.35rem;
+  font-weight: 600;
+}
+.token-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 0.8rem;
+}
+.token-icon.TKA {
+  background: #7c5cff;
+}
+.token-icon.TKA::before {
+  content: "A";
+}
+.token-icon.TKB {
+  background: #2775ca;
+}
+.token-icon.TKB::before {
+  content: "B";
+}
+.field-balance {
+  margin: 0;
+  text-align: right;
+  color: var(--muted);
+}
+.flip {
+  display: block;
+  margin: -0.9rem auto;
+  position: relative;
+  z-index: 1;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: 4px solid var(--card);
+  background: var(--field);
+  color: var(--text);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+.quote-details {
+  margin: 0.75rem 0 0;
+  color: var(--muted);
+  text-align: center;
+}
+.quote-details p {
+  margin: 0.2rem 0;
+}
+/* Amount larger than the balance: both the typed amount and the balance turn red. */
+#amount.insufficient,
+.field-balance.insufficient {
+  color: var(--danger);
+}
+
+/* ---- Buttons and messages ---- */
+button.primary {
+  width: 100%;
+  margin-top: 0.75rem;
+  padding: 1rem;
+  border: none;
+  border-radius: 16px;
+  background: var(--primary);
+  color: #fff;
+  font: inherit;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+button.primary:disabled {
+  background: var(--field);
+  color: var(--muted);
+  cursor: not-allowed;
+}
+:focus-visible {
+  outline: 3px solid #f59e0b;
+  outline-offset: 2px;
+}
+.error {
+  color: var(--danger);
+  font-weight: 600;
+}
+.error:empty,
+.status:empty {
+  display: none;
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---- History ---- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+th,
+td {
+  text-align: left;
+  padding: 0.4rem 0.35rem;
+  border-bottom: 1px solid var(--border);
+}
+th {
+  color: var(--muted);
+  font-weight: 600;
+}

@@ -1,0 +1,13 @@
+# Camadas de teste: pergunta, o que entra e onde costumam morar
+
+| Camada | Pergunta que responde | Entra | Fica de fora | Onde costuma morar |
+|---|---|---|---|---|
+| Unitário | A lógica interna está certa? | Cálculo, arredondamento, conversão de unidades, validação, regra de expiração com relógio injetado, edge cases | Rede, banco, filas; getters e mapeamentos sem lógica; métodos privados | No repositório do código |
+| Componente | O serviço funciona isolado? | Status e corpo de erro, mapeamento das falhas de cada dependência, validação de entrada, regras de negócio na fronteira, limites de tempo, efeitos colaterais | Formato esperado por outro sistema (contrato) e a peça real do outro lado (integração) | No repositório do serviço |
+| Contrato (consumidor) | O que eu peço e uso da API está registrado? | Cada chamada do cliente de API real, com os campos que a tela usa, e um cenário por tipo de erro | Regras de validação da API, efeitos colaterais, campos que o consumidor não usa | No repositório do consumidor |
+| Contrato (provedor) | A API ainda entrega o que os consumidores usam? | Provider states que reproduzem cada cenário pedido | Cálculos e regras de negócio (componente) | No repositório do provedor |
+| UI com API simulada | A tela lida com cada resposta da API? | Erros e edge cases do servidor, tempo (expiração, contagem regressiva), processos longos, dados que mudam a tela, acessibilidade de estados | O formato real da resposta (contrato), regras do back (componente), CORS, cookies e sessão (E2E) | No repositório do front |
+| Assíncrono / integração | As fronteiras reais funcionam juntas, no tempo certo? | Confirmação por evento, falha depois da resposta, idempotência, reprocessamento, peça parada | Cálculo de valores (componente), a tela (UI e E2E) | Repositório de testes de sistema, ou no serviço, com dependências efêmeras |
+| E2E | A jornada crítica funciona de ponta a ponta? | Poucas jornadas que definem o produto, integração real, acessibilidade dessas telas, configuração do ambiente | Edge cases, falhas de dependência, terceiros que você não controla | Repositório de testes de sistema ou do front |
+| Carga | O sistema cumpre a meta sob volume e concorrência? | Jornadas e endpoints críticos, concorrência sobre o mesmo recurso, metas como thresholds | Regras de negócio (só checks simples), ambiente compartilhado sem combinar | Repositório de confiabilidade ou do serviço |
+| Sintético | A jornada continua funcionando em produção agora? | Poucas jornadas curtas, validando o resultado, a partir de mais de um local | Edge cases, operações com efeito real (pedidos, pagamentos, transações) | Repositório de observabilidade |
