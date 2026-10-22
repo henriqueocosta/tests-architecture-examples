@@ -247,13 +247,25 @@ expect(swap).to.include({ status: "confirmed", amountOut: "199.4", fee: "0.6" })
    - `npm run provider:malformed` → *"O provedor de preços enviou uma resposta inválida. Tente novamente."*
 
    O mesmo `504` que o teste verifica em 200 ms aparece na tela real depois de 2 s. O cenário do teste não é inventado.
-3. **Restaure:**
+
+   Agora, **com o provedor ainda lento**, rode `npm run test:api` de novo: continua **23 passing**. Isso é esperado. Os testes de componente não usam o provedor da stack: cada teste sobe o próprio provedor falso, numa porta aleatória, e escolhe como ele se comporta ([`tests/support/fakePriceProvider.ts`](tests/support/fakePriceProvider.ts)). Por isso eles não dependem do estado de nada que esteja rodando e dão o mesmo resultado em qualquer máquina.
+3. **Restaure o provedor:**
    ```bash
    npm run provider:normal
    ```
    **Cotar** volta a funcionar.
+4. **Quebre o código, não o provedor.** O que um teste de componente pega é uma mudança na API. Simule um erro comum: em [`api/src/errors.ts:27`](api/src/errors.ts#L27), troque o status do timeout de `504` para `500`:
+   ```ts
+   timeout: { status: 500, code: "PRICE_PROVIDER_TIMEOUT" },
+   ```
+   Rode `npm run test:api`. Agora você vê **22 passing, 1 failing**:
+   ```
+   1) GET /quotes
+      Error: expected 504 "Gateway Timeout", got 500 "Internal Server Error"
+   ```
+   A falha aponta a regra exata que mudou. Desfaça a edição (volte para `504`) e rode de novo: **23 passing**.
 
-**Conclusão:** reproduzir cada falha à mão exige um comando e uma espera. Com injeção de dependências, o teste de componente cobre todas em 0,3 s, com precisão de milissegundos no relógio. Essa testabilidade é uma decisão de arquitetura (`createApp` recebe as dependências), não de teste: ela precisa estar no código desde o início.
+**Conclusão:** reproduzir cada falha à mão exige um comando e uma espera. Com injeção de dependências, o teste de componente simula cada falha do provedor por conta própria, quebra quando o código da API muda o tratamento dela, e cobre todas em 0,3 s, com precisão de milissegundos no relógio. Essa testabilidade é uma decisão de arquitetura (`createApp` recebe as dependências), não de teste: ela precisa estar no código desde o início.
 
 ---
 
@@ -446,6 +458,15 @@ Os testes localizam os elementos pelo papel e pelo nome acessível (`getByRole`,
 2. **Compare com a tela real:** rode `npm run provider:down`, digite um valor e clique em **Cotar**. Aparece *"Provedor de preços indisponível. Tente novamente em instantes."*, o mesmo texto que o teste verifica. Restaure com `npm run provider:normal`.
 
    O mock reproduz uma resposta que a API real de fato dá. O que garante que os dois continuem iguais ao longo do tempo é o contrato da parte 3.
+
+   Rodar `npm run test:ui` com o provedor fora do ar não muda nada: **8 passed**. Os testes de UI nem chamam a API real, porque `page.route` responde no lugar dela. Eles quebram quando muda o **código da tela**.
+3. **Quebre a tela.** Em [`web/app.js:10`](web/app.js#L10), troque a mensagem de provedor indisponível por `"Erro ao cotar."` e rode `npm run test:ui`. Agora você vê **1 failed, 7 passed**:
+   ```
+   ✘ explains that the price provider is unavailable
+     Expected: "Provedor de preços indisponível. Tente novamente em instantes."
+     Received: "Erro ao cotar."
+   ```
+   Desfaça a edição e rode de novo: **8 passed**.
 
 **Conclusão:** esperar 15 s de verdade para ver uma cotação expirar, ou forçar um swap a ficar pendente para sempre, seria lento e frágil. Com a API e o relógio controlados, leva segundos. O teste de UI confia no formato da API; o teste de contrato garante esse formato. As duas camadas se complementam.
 
